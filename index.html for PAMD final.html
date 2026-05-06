@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClearCare — Hip Replacement</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --maroon: #8B0000;
+      --maroon-dark: #6b0000;
+      --maroon-light: #fff0f0;
+      --green: #16a34a;
+      --green-light: #dcfce7;
+      --amber: #b45309;
+      --amber-light: #fef3c7;
+      --red-warn: #dc2626;
+      --red-warn-light: #fee2e2;
+      --gray-50: #fafafa;
+      --gray-100: #f4f4f5;
+      --gray-200: #e4e4e7;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --white: #ffffff;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow: 0 4px 16px rgba(0,0,0,0.09);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.12);
+      --radius: 14px;
+      --radius-sm: 8px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--gray-50); color: var(--gray-800); min-height: 100vh; }
+
+    /* NAV */
+    nav { background: var(--maroon); padding: 0 2.5rem; display: flex; align-items: center; justify-content: space-between; height: 60px; position: sticky; top: 0; z-index: 200; box-shadow: 0 2px 8px rgba(139,0,0,0.3); }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo-icon { width: 32px; height: 32px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+    .nav-logo-text { font-family: 'Source Serif 4', serif; font-size: 1.2rem; color: white; font-weight: 700; }
+    .nav-logo-text span { color: #ffd9d9; }
+    .nav-right { display: flex; align-items: center; gap: 1.25rem; }
+    .nav-plan { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: white; padding: 0.3rem 0.85rem; border-radius: 20px; font-size: 0.78rem; font-weight: 500; }
+    .nav-avatar { width: 34px; height: 34px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--maroon); font-size: 0.75rem; font-weight: 800; cursor: pointer; }
+
+    /* WELCOME BANNER */
+    .welcome-banner { background: linear-gradient(135deg, var(--maroon-dark) 0%, var(--maroon) 60%, #a83232 100%); color: white; padding: 2.5rem 2.5rem 2rem; }
+    .welcome-inner { max-width: 1100px; margin: 0 auto; }
+    .welcome-greeting { font-family: 'Source Serif 4', serif; font-size: 1.75rem; font-weight: 700; margin-bottom: 1.5rem; letter-spacing: -0.02em; }
+    .welcome-greeting span { color: #ffd9d9; }
+    .welcome-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+    .welcome-card { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: var(--radius-sm); padding: 1rem 1.25rem; }
+    .wc-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.65); margin-bottom: 0.35rem; font-weight: 600; }
+    .wc-value { font-size: 0.95rem; font-weight: 600; color: white; line-height: 1.3; }
+    .wc-sub { font-size: 0.75rem; color: rgba(255,255,255,0.6); margin-top: 0.2rem; }
+    .covered-amount { font-size: 1.35rem !important; font-family: 'Source Serif 4', serif; font-weight: 700; }
+    .covered-pill { display: inline-block; background: rgba(255,255,255,0.2); border-radius: 4px; padding: 1px 6px; font-size: 0.7rem; font-weight: 600; margin-left: 6px; vertical-align: middle; color: rgba(255,255,255,0.9); }
+
+    /* MAIN */
+    .main { max-width: 1100px; margin: 0 auto; padding: 2rem 2.5rem 4rem; }
+
+    /* SECTION HEADERS */
+    .section-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; }
+    .section-badge { display: inline-flex; align-items: center; gap: 5px; padding: 0.3rem 0.85rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+    .badge-in { background: var(--green-light); color: var(--green); border: 1px solid rgba(22,163,74,0.2); }
+    .badge-out { background: var(--red-warn-light); color: var(--red-warn); border: 1px solid rgba(220,38,38,0.2); }
+    .section-title-text { font-family: 'Source Serif 4', serif; font-size: 1.2rem; font-weight: 700; color: var(--gray-800); }
+    .section-count { font-size: 0.8rem; color: var(--gray-400); font-weight: 500; }
+
+    /* FILTER BAR */
+    .filter-bar { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .filter-label { font-size: 0.82rem; color: var(--gray-500); font-weight: 500; }
+    .filter-select { padding: 0.4rem 1.8rem 0.4rem 0.75rem; border: 1.5px solid var(--gray-200); border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--gray-700); background: white; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%236b7280' d='M5 7L1 3h8z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; }
+
+    /* PROVIDER CARD */
+    .provider-card { background: white; border-radius: var(--radius); border: 1.5px solid var(--gray-200); box-shadow: var(--shadow-sm); margin-bottom: 1.25rem; overflow: hidden; transition: box-shadow 0.2s, transform 0.2s; position: relative; }
+    .provider-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+    .provider-card.featured { border-color: var(--maroon); box-shadow: 0 0 0 2px rgba(139,0,0,0.12), var(--shadow-sm); }
+    .provider-card.featured:hover { box-shadow: 0 0 0 2px rgba(139,0,0,0.2), var(--shadow); }
+    .featured-ribbon { position: absolute; top: 0; left: 0; background: var(--maroon); color: white; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 0.3rem 1rem 0.3rem 0.75rem; border-bottom-right-radius: 8px; z-index: 2; }
+    .card-inner { display: grid; grid-template-columns: 240px 1fr; }
+    .card-image { position: relative; overflow: hidden; min-height: 200px; }
+    .card-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .card-image-fallback { width: 100%; height: 100%; min-height: 200px; display: none; flex-direction: column; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--gray-100), var(--gray-200)); color: var(--gray-400); font-size: 2.5rem; }
+    .in-network-tag { position: absolute; bottom: 10px; left: 10px; background: var(--green); color: white; font-size: 0.68rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 5px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .out-network-tag { position: absolute; bottom: 10px; left: 10px; background: var(--red-warn); color: white; font-size: 0.68rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 5px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .card-body { padding: 1.4rem 1.5rem; display: flex; flex-direction: column; }
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
+    .hospital-name { font-family: 'Source Serif 4', serif; font-size: 1.15rem; font-weight: 700; color: var(--gray-800); line-height: 1.2; }
+    .hospital-address { font-size: 0.78rem; color: var(--gray-400); margin-top: 3px; }
+    .stars-wrap { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
+    .stars { display: flex; gap: 1px; }
+    .star { color: #f59e0b; font-size: 0.9rem; }
+    .star-empty { color: var(--gray-300); font-size: 0.9rem; }
+    .star-score { font-size: 0.85rem; font-weight: 700; color: var(--gray-700); }
+    .star-label { font-size: 0.75rem; color: var(--gray-400); }
+
+    /* DATA GRID */
+    .data-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-bottom: 1rem; }
+    .data-cell { background: var(--gray-50); border: 1px solid var(--gray-100); border-radius: var(--radius-sm); padding: 0.75rem 0.85rem; }
+    .data-cell.highlight { background: var(--green-light); border-color: rgba(22,163,74,0.2); }
+    .data-cell.highlight-red { background: var(--red-warn-light); border-color: rgba(220,38,38,0.2); }
+    .dc-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--gray-400); font-weight: 600; margin-bottom: 0.3rem; }
+    .dc-value { font-size: 1.05rem; font-weight: 700; color: var(--gray-800); font-family: 'Source Serif 4', serif; }
+    .dc-value.green { color: var(--green); }
+    .dc-value.red { color: var(--red-warn); }
+    .dc-sub { font-size: 0.72rem; color: var(--gray-400); margin-top: 2px; }
+
+    /* QUALITY */
+    .quality-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .quality-chip { display: inline-flex; align-items: center; gap: 4px; padding: 0.25rem 0.65rem; border-radius: 20px; font-size: 0.72rem; font-weight: 600; background: var(--gray-100); color: var(--gray-600); }
+    .quality-chip.good { background: var(--green-light); color: var(--green); }
+    .quality-chip.ok { background: var(--amber-light); color: var(--amber); }
+
+    /* AVAIL */
+    .avail-section { margin-bottom: 1rem; }
+    .avail-label { font-size: 0.75rem; color: var(--gray-500); margin-bottom: 5px; font-weight: 500; }
+    .avail-bar { height: 6px; background: var(--gray-200); border-radius: 3px; overflow: hidden; }
+    .avail-fill { height: 100%; border-radius: 3px; background: var(--green); }
+    .avail-fill.med { background: #d97706; }
+    .avail-fill.low { background: var(--red-warn); }
+
+    /* CARD FOOTER */
+    .card-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 0.85rem; border-top: 1px solid var(--gray-100); margin-top: auto; }
+    .next-appt { font-size: 0.82rem; color: var(--gray-600); }
+    .next-appt strong { color: var(--green); font-weight: 700; }
+    .btn-schedule { display: inline-flex; align-items: center; gap: 6px; background: var(--maroon); color: white; border: none; border-radius: var(--radius-sm); padding: 0.6rem 1.25rem; font-family: 'DM Sans', sans-serif; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: background 0.15s, transform 0.15s, box-shadow 0.15s; }
+    .btn-schedule:hover { background: var(--maroon-dark); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(139,0,0,0.3); }
+    .btn-oon { background: var(--gray-300); color: var(--gray-600); cursor: not-allowed; }
+    .btn-oon:hover { background: var(--gray-300); transform: none; box-shadow: none; }
+
+    /* OON WARNING */
+    .oon-warning { background: var(--red-warn-light); border: 1.5px solid rgba(220,38,38,0.25); border-radius: var(--radius-sm); padding: 1rem 1.25rem; margin-bottom: 1.5rem; display: flex; gap: 0.85rem; align-items: flex-start; }
+    .oon-warning-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+    .oon-title { font-weight: 700; color: var(--red-warn); font-size: 0.9rem; margin-bottom: 0.3rem; }
+    .oon-warning p { font-size: 0.82rem; color: #9b1c1c; line-height: 1.5; }
+    .oon-cost-diff { background: var(--red-warn-light); border: 1px solid rgba(220,38,38,0.2); border-radius: var(--radius-sm); padding: 0.6rem 0.85rem; margin-bottom: 0.85rem; font-size: 0.8rem; color: #9b1c1c; line-height: 1.5; }
+    .oon-cost-diff strong { color: var(--red-warn); font-weight: 700; }
+
+    /* DIVIDER */
+    .section-divider { border: none; border-top: 2px dashed var(--gray-200); margin: 2.5rem 0; }
+
+    /* MODAL */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 1.5rem; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal { background: white; border-radius: 20px; padding: 2.5rem; max-width: 480px; width: 100%; box-shadow: var(--shadow-lg); transform: translateY(20px); transition: transform 0.25s; text-align: center; }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-icon { width: 72px; height: 72px; background: var(--green-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 1.5rem; }
+    .modal h2 { font-family: 'Source Serif 4', serif; font-size: 1.4rem; color: var(--gray-800); margin-bottom: 0.5rem; }
+    .modal-hospital { font-size: 1rem; font-weight: 700; color: var(--maroon); margin-bottom: 1rem; }
+    .modal-details { background: var(--gray-50); border-radius: var(--radius-sm); padding: 1rem; margin-bottom: 1.5rem; text-align: left; }
+    .modal-detail-row { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 0.3rem 0; border-bottom: 1px solid var(--gray-100); }
+    .modal-detail-row:last-child { border-bottom: none; }
+    .mdr-label { color: var(--gray-500); }
+    .mdr-value { font-weight: 600; color: var(--gray-800); }
+    .mdr-value.green { color: var(--green); }
+    .modal-close { background: var(--maroon); color: white; border: none; border-radius: var(--radius-sm); padding: 0.75rem 2rem; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 600; cursor: pointer; width: 100%; transition: background 0.15s; }
+    .modal-close:hover { background: var(--maroon-dark); }
+    .modal-note { font-size: 0.75rem; color: var(--gray-400); margin-top: 0.75rem; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-up { animation: fadeUp 0.4s ease both; }
+    .d1 { animation-delay: 0.05s; } .d2 { animation-delay: 0.1s; } .d3 { animation-delay: 0.15s; }
+    .d4 { animation-delay: 0.2s; } .d5 { animation-delay: 0.25s; } .d6 { animation-delay: 0.3s; }
+
+    footer { border-top: 1px solid var(--gray-200); padding: 1.5rem 2.5rem; text-align: center; color: var(--gray-400); font-size: 0.75rem; background: white; }
+    footer strong { color: var(--maroon); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="nav-logo-icon">＋</div>
+
+  </a>
+  <div class="nav-right">
+    <div class="nav-plan">UCHP by Aetna</div>
+    <div class="nav-avatar">EB</div>
+  </div>
+</nav>
+
+<!-- WELCOME BANNER -->
+<div class="welcome-banner fade-up">
+  <div class="welcome-inner">
+    <div class="welcome-greeting">Welcome, <span>Professor Budish!</span> 👋</div>
+    <div class="welcome-details">
+      <div class="welcome-card">
+        <div class="wc-label">🏛️ Insurance Plan</div>
+        <div class="wc-value">University of Chicago Health Plan (UCHP)</div>
+        <div class="wc-sub">Administered by Aetna · Plan Year 2025</div>
+      </div>
+      <div class="welcome-card">
+        <div class="wc-label">🦴 Procedure to Be Scheduled</div>
+        <div class="wc-value">Total Hip Replacement</div>
+        <div class="wc-sub">Elective · Non-emergent · CPT 27130</div>
+      </div>
+      <div class="welcome-card">
+        <div class="wc-label">💰 Plan Covered Amount (Reference Price)</div>
+        <div class="wc-value covered-amount">$40,000 <span class="covered-pill">UCHP Max</span></div>
+        <div class="wc-sub">You pay the full difference above this at any provider</div>
+      </div>
+      <div class="welcome-card">
+        <div class="wc-label">📋 Your Benefit Status</div>
+        <div class="wc-value">Deductible: $250 met ✓</div>
+        <div class="wc-sub">Out-of-Pocket Max: $3,000 · In-network coverage only</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- SORT BAR -->
+  <div class="filter-bar fade-up d1">
+    <span class="filter-label">Sort by:</span>
+    <select class="filter-select">
+      <option>Out-of-Pocket Cost (Low → High)</option>
+      <option>Star Rating (High → Low)</option>
+      <option>Next Available Appointment</option>
+      <option>Total Procedure Cost</option>
+    </select>
+    <span class="filter-label" style="margin-left:1rem;">Distance:</span>
+    <select class="filter-select">
+      <option>Any distance</option>
+      <option>Within 5 miles</option>
+      <option>Within 15 miles</option>
+      <option>Within 30 miles</option>
+    </select>
+  </div>
+
+  <!-- ══ IN-NETWORK ══ -->
+  <div class="section-header fade-up d1">
+    <span class="section-badge badge-in">✓ In-Network</span>
+    <span class="section-title-text">UCHP Covered Facilities</span>
+    <span class="section-count">3 options · Your copay applies · Plan covers the rest</span>
+  </div>
+
+  <!-- CARD 1: UChicago Medicine -->
+  <div class="provider-card featured fade-up d2">
+    <div class="featured-ribbon">⭐ Plan Recommended · Best Value</div>
+    <div class="card-inner" style="padding-top:0;">
+      <div class="card-image">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Uchicago_ccd_2019.jpg/1280px-Uchicago_ccd_2019.jpg"
+             alt="UChicago Medicine"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="card-image-fallback">🏥</div>
+        <span class="in-network-tag">✓ In-Network</span>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div>
+            <div class="hospital-name">UChicago Medicine — Center for Care &amp; Discovery</div>
+            <div class="hospital-address">5841 S Maryland Ave, Hyde Park · 0.4 mi from campus</div>
+          </div>
+          <div class="stars-wrap">
+            <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+            <span class="star-score">5.0</span><span class="star-label">&nbsp;Hip Replacement</span>
+          </div>
+        </div>
+        <div class="data-grid">
+          <div class="data-cell">
+            <div class="dc-label">Total Est. Procedure Cost</div>
+            <div class="dc-value">$35,000</div>
+            <div class="dc-sub">$5,000 below reference price</div>
+          </div>
+          <div class="data-cell highlight">
+            <div class="dc-label">Your Est. Out-of-Pocket</div>
+            <div class="dc-value green">$400</div>
+            <div class="dc-sub">Specialist copay only · Plan covers rest</div>
+          </div>
+          <div class="data-cell highlight">
+            <div class="dc-label">vs. Reference Price ($40k)</div>
+            <div class="dc-value green">$0 extra ✓</div>
+            <div class="dc-sub">Under the plan limit</div>
+          </div>
+        </div>
+        <div class="quality-row">
+          <span class="quality-chip good">🏆 Top 5% Nationally · Hip Replacement</span>
+          <span class="quality-chip good">✓ Very High Procedure Volume</span>
+          <span class="quality-chip good">✓ Low Complication Rate</span>
+          <span class="quality-chip good">✓ Robotic-Assisted Surgery</span>
+        </div>
+        <div class="avail-section">
+          <div class="avail-label">Scheduling Availability — Next available: <strong style="color:var(--green)">June 1, 2025</strong></div>
+          <div class="avail-bar"><div class="avail-fill" style="width:82%"></div></div>
+        </div>
+        <div class="card-footer">
+          <div class="next-appt">Earliest: <strong>June 1, 2025</strong></div>
+          <button class="btn-schedule" onclick="openModal('UChicago Medicine — Center for Care &amp; Discovery','$400','June 1, 2025','$35,000','5.0 / 5 ★')">Schedule Now →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 2: NorthShore -->
+  <div class="provider-card fade-up d3">
+    <div class="card-inner">
+      <div class="card-image">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Evanston_Hospital_NSUH.jpg/1280px-Evanston_Hospital_NSUH.jpg"
+             alt="NorthShore Evanston Hospital"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="card-image-fallback">🏥</div>
+        <span class="in-network-tag">✓ In-Network</span>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div>
+            <div class="hospital-name">NorthShore Evanston Hospital (Endeavor Health)</div>
+            <div class="hospital-address">2650 Ridge Ave, Evanston · 12 mi north · UChicago Pritzker affiliate</div>
+          </div>
+          <div class="stars-wrap">
+            <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star-empty">★</span></div>
+            <span class="star-score">4.0</span><span class="star-label">&nbsp;Hip Replacement</span>
+          </div>
+        </div>
+        <div class="data-grid">
+          <div class="data-cell">
+            <div class="dc-label">Total Est. Procedure Cost</div>
+            <div class="dc-value">$38,500</div>
+            <div class="dc-sub">$1,500 below reference price</div>
+          </div>
+          <div class="data-cell highlight">
+            <div class="dc-label">Your Est. Out-of-Pocket</div>
+            <div class="dc-value green">$400</div>
+            <div class="dc-sub">Specialist copay only · Plan covers rest</div>
+          </div>
+          <div class="data-cell highlight">
+            <div class="dc-label">vs. Reference Price ($40k)</div>
+            <div class="dc-value green">$0 extra ✓</div>
+            <div class="dc-sub">Under the plan limit</div>
+          </div>
+        </div>
+        <div class="quality-row">
+          <span class="quality-chip good">✓ High Procedure Volume</span>
+          <span class="quality-chip good">✓ Orthopaedic &amp; Spine Institute</span>
+          <span class="quality-chip ok">⚠ Moderate Complication Rate</span>
+        </div>
+        <div class="avail-section">
+          <div class="avail-label">Scheduling Availability — Next available: <strong style="color:var(--green)">June 10, 2025</strong></div>
+          <div class="avail-bar"><div class="avail-fill med" style="width:55%"></div></div>
+        </div>
+        <div class="card-footer">
+          <div class="next-appt">Earliest: <strong>June 10, 2025</strong></div>
+          <button class="btn-schedule" onclick="openModal('NorthShore Evanston Hospital','$400','June 10, 2025','$38,500','4.0 / 5 ★')">Schedule Now →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD 3: AdventHealth -->
+  <div class="provider-card fade-up d4">
+    <div class="card-inner">
+      <div class="card-image">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Adventist_Bolingbrook_Hospital.jpg/1280px-Adventist_Bolingbrook_Hospital.jpg"
+             alt="AdventHealth Bolingbrook"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="card-image-fallback">🏥</div>
+        <span class="in-network-tag">✓ In-Network</span>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div>
+            <div class="hospital-name">AdventHealth Bolingbrook</div>
+            <div class="hospital-address">500 Remington Blvd, Bolingbrook · 28 mi southwest · UCHP partner since 2024</div>
+          </div>
+          <div class="stars-wrap">
+            <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star-empty">★</span></div>
+            <span class="star-score">3.8</span><span class="star-label">&nbsp;Hip Replacement</span>
+          </div>
+        </div>
+        <div class="data-grid">
+          <div class="data-cell">
+            <div class="dc-label">Total Est. Procedure Cost</div>
+            <div class="dc-value">$32,000</div>
+            <div class="dc-sub">Lowest cost · $8,000 below reference</div>
+          </div>
+          <div class="data-cell highlight">
+            <div class="dc-label">Your Est. Out-of-Pocket</div>
+            <div class="dc-value green">$400</div>
+            <div class="dc-sub">Specialist copay only · Plan covers rest</div>
+          </div>
+          <div class="data-cell highlight">
+            <div class="dc-label">vs. Reference Price ($40k)</div>
+            <div class="dc-value green">$0 extra ✓</div>
+            <div class="dc-sub">Well under the plan limit</div>
+          </div>
+        </div>
+        <div class="quality-row">
+          <span class="quality-chip ok">⚠ Lower Procedure Volume</span>
+          <span class="quality-chip good">✓ UCHP Network Partner (2024)</span>
+          <span class="quality-chip good">✓ Fastest Availability</span>
+        </div>
+        <div class="avail-section">
+          <div class="avail-label">Scheduling Availability — Next available: <strong style="color:var(--green)">May 22, 2025</strong></div>
+          <div class="avail-bar"><div class="avail-fill" style="width:90%"></div></div>
+        </div>
+        <div class="card-footer">
+          <div class="next-appt">Earliest: <strong>May 22, 2025</strong></div>
+          <button class="btn-schedule" onclick="openModal('AdventHealth Bolingbrook','$400','May 22, 2025','$32,000','3.8 / 5 ★')">Schedule Now →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider fade-up d4">
+
+  <!-- OON WARNING -->
+  <div class="oon-warning fade-up d5">
+    <div class="oon-warning-icon">⛔</div>
+    <div>
+      <div class="oon-title">Out-of-Network: These Providers Are NOT Covered by UCHP</div>
+      <p>UCHP covers care only at UChicago Medicine, NorthShore (Endeavor Health), and AdventHealth facilities. The providers below are <strong>outside your network</strong>. You will owe the <strong>full amount above the $40,000 reference price</strong> — this gap is entirely your responsibility. Critically, <strong>these costs do not count toward your $3,000 out-of-pocket maximum</strong>, meaning you receive no financial protection from your plan. UCHP does not cover out-of-network care except in life-threatening emergencies.</p>
+    </div>
+  </div>
+
+  <!-- OON SECTION HEADER -->
+  <div class="section-header fade-up d5">
+    <span class="section-badge badge-out">✕ Out-of-Network</span>
+    <span class="section-title-text">Not Covered by UCHP</span>
+    <span class="section-count">3 providers shown</span>
+  </div>
+
+  <!-- OON CARD: Northwestern -->
+  <div class="provider-card fade-up d5" style="opacity:0.93">
+    <div class="card-inner">
+      <div class="card-image">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Northwestern_Memorial_Hospital.jpg/1280px-Northwestern_Memorial_Hospital.jpg"
+             alt="Northwestern Memorial Hospital"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="card-image-fallback">🏥</div>
+        <span class="out-network-tag">✕ Out-of-Network</span>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div>
+            <div class="hospital-name">Northwestern Memorial Hospital</div>
+            <div class="hospital-address">251 E Huron St, Streeterville · 9 mi north</div>
+          </div>
+          <div class="stars-wrap">
+            <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span></div>
+            <span class="star-score">4.9</span><span class="star-label">&nbsp;Hip Replacement</span>
+          </div>
+        </div>
+        <div class="oon-cost-diff">⚠️ <strong>You would owe ~$22,000 directly.</strong> Total cost is $62,000 — $22,000 above the $40,000 reference price. UCHP pays nothing above $40,000, and this $22,000 gap <strong>does not count toward your $3,000 out-of-pocket maximum</strong>. You have no plan protection here.</div>
+        <div class="data-grid">
+          <div class="data-cell">
+            <div class="dc-label">Total Est. Procedure Cost</div>
+            <div class="dc-value">$62,000</div>
+            <div class="dc-sub">$22,000 above reference price</div>
+          </div>
+          <div class="data-cell highlight-red">
+            <div class="dc-label">Your Est. Out-of-Pocket</div>
+            <div class="dc-value red">~$22,400</div>
+            <div class="dc-sub">$22,000 gap (not covered) + $400 copay</div>
+          </div>
+          <div class="data-cell highlight-red">
+            <div class="dc-label">vs. Reference Price ($40k)</div>
+            <div class="dc-value red">+$22,000 owed</div>
+            <div class="dc-sub">Does not count toward out-of-pocket maximum</div>
+          </div>
+        </div>
+        <div class="quality-row">
+          <span class="quality-chip good">🏆 #1 Hospital in Illinois (US News 2025)</span>
+          <span class="quality-chip good">✓ Very High Procedure Volume</span>
+          <span class="quality-chip good">✓ Robotic-Assisted Surgery</span>
+        </div>
+        <div class="avail-section">
+          <div class="avail-label">Scheduling Availability — Next available: <strong>June 20, 2025</strong></div>
+          <div class="avail-bar"><div class="avail-fill med" style="width:45%"></div></div>
+        </div>
+        <div class="card-footer">
+          <div class="next-appt" style="color:var(--red-warn);font-size:0.8rem;">⚠ Out-of-Network — ~$22,000 owed directly, not covered by plan</div>
+          <button class="btn-schedule btn-oon" disabled>Schedule (Out-of-Network) →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OON CARD: Rush -->
+  <div class="provider-card fade-up d6" style="opacity:0.93">
+    <div class="card-inner">
+      <div class="card-image">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Rush_University_Medical_Center.jpg/1280px-Rush_University_Medical_Center.jpg"
+             alt="Rush University Medical Center"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="card-image-fallback">🏥</div>
+        <span class="out-network-tag">✕ Out-of-Network</span>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div>
+            <div class="hospital-name">Rush University Medical Center</div>
+            <div class="hospital-address">1620 W Harrison St, Near West Side · 7 mi northwest</div>
+          </div>
+          <div class="stars-wrap">
+            <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star-empty">★</span></div>
+            <span class="star-score">4.5</span><span class="star-label">&nbsp;Hip Replacement</span>
+          </div>
+        </div>
+        <div class="oon-cost-diff">⚠️ <strong>You would owe ~$15,000 directly.</strong> Total cost is $55,000 — $15,000 above the $40,000 reference price. UCHP will not cover this gap, and <strong>this $15,000 does not count toward your $3,000 out-of-pocket maximum</strong>.</div>
+        <div class="data-grid">
+          <div class="data-cell">
+            <div class="dc-label">Total Est. Procedure Cost</div>
+            <div class="dc-value">$55,000</div>
+            <div class="dc-sub">$15,000 above reference price</div>
+          </div>
+          <div class="data-cell highlight-red">
+            <div class="dc-label">Your Est. Out-of-Pocket</div>
+            <div class="dc-value red">~$15,400</div>
+            <div class="dc-sub">$15,000 gap (not covered) + $400 copay</div>
+          </div>
+          <div class="data-cell highlight-red">
+            <div class="dc-label">vs. Reference Price ($40k)</div>
+            <div class="dc-value red">+$15,000 owed</div>
+            <div class="dc-sub">Does not count toward out-of-pocket maximum</div>
+          </div>
+        </div>
+        <div class="quality-row">
+          <span class="quality-chip good">🏆 #1 for Orthopedics in Illinois</span>
+          <span class="quality-chip good">✓ High Volume Specialist Center</span>
+        </div>
+        <div class="avail-section">
+          <div class="avail-label">Scheduling Availability — Next available: <strong>July 5, 2025</strong></div>
+          <div class="avail-bar"><div class="avail-fill low" style="width:30%"></div></div>
+        </div>
+        <div class="card-footer">
+          <div class="next-appt" style="color:var(--red-warn);font-size:0.8rem;">⚠ Out-of-Network — ~$15,000 owed directly, not covered by plan</div>
+          <button class="btn-schedule btn-oon" disabled>Schedule (Out-of-Network) →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OON CARD: UIC -->
+  <div class="provider-card fade-up d6" style="opacity:0.93">
+    <div class="card-inner">
+      <div class="card-image">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/UI_Health_hospital_building.jpg/1280px-UI_Health_hospital_building.jpg"
+             alt="UI Health - University of Illinois Hospital"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="card-image-fallback">🏥</div>
+        <span class="out-network-tag">✕ Out-of-Network</span>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div>
+            <div class="hospital-name">UI Health — University of Illinois Hospital</div>
+            <div class="hospital-address">1740 W Taylor St, Near West Side · 7 mi northwest</div>
+          </div>
+          <div class="stars-wrap">
+            <div class="stars"><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star-empty">★</span><span class="star-empty">★</span></div>
+            <span class="star-score">3.2</span><span class="star-label">&nbsp;Hip Replacement</span>
+          </div>
+        </div>
+        <div class="oon-cost-diff">⚠️ <strong>You would owe ~$8,000 directly.</strong> Total cost is $48,000 — $8,000 above the $40,000 reference price. UCHP will not cover this gap, and <strong>this $8,000 does not count toward your $3,000 out-of-pocket maximum</strong>.</div>
+        <div class="data-grid">
+          <div class="data-cell">
+            <div class="dc-label">Total Est. Procedure Cost</div>
+            <div class="dc-value">$48,000</div>
+            <div class="dc-sub">$8,000 above reference price</div>
+          </div>
+          <div class="data-cell highlight-red">
+            <div class="dc-label">Your Est. Out-of-Pocket</div>
+            <div class="dc-value red">~$8,400</div>
+            <div class="dc-sub">$8,000 gap (not covered) + $400 copay</div>
+          </div>
+          <div class="data-cell highlight-red">
+            <div class="dc-label">vs. Reference Price ($40k)</div>
+            <div class="dc-value red">+$8,000 owed</div>
+            <div class="dc-sub">Does not count toward out-of-pocket maximum</div>
+          </div>
+        </div>
+        <div class="quality-row">
+          <span class="quality-chip ok">⚠ Average Procedure Volume</span>
+          <span class="quality-chip good">✓ Academic Medical Center</span>
+        </div>
+        <div class="avail-section">
+          <div class="avail-label">Scheduling Availability — Next available: <strong>June 15, 2025</strong></div>
+          <div class="avail-bar"><div class="avail-fill med" style="width:60%"></div></div>
+        </div>
+        <div class="card-footer">
+          <div class="next-appt" style="color:var(--red-warn);font-size:0.8rem;">⚠ Out-of-Network — ~$8,000 owed directly, not covered by plan</div>
+          <button class="btn-schedule btn-oon" disabled>Schedule (Out-of-Network) →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CONFIRMATION MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-icon">✅</div>
+    <h2>Appointment Request Sent!</h2>
+    <div class="modal-hospital" id="modal-hospital">—</div>
+    <div class="modal-details">
+      <div class="modal-detail-row"><span class="mdr-label">Procedure</span><span class="mdr-value">Total Hip Replacement</span></div>
+      <div class="modal-detail-row"><span class="mdr-label">Provider</span><span class="mdr-value" id="modal-provider">—</span></div>
+      <div class="modal-detail-row"><span class="mdr-label">Earliest Available</span><span class="mdr-value green" id="modal-date">—</span></div>
+      <div class="modal-detail-row"><span class="mdr-label">Total Est. Cost</span><span class="mdr-value" id="modal-total">—</span></div>
+      <div class="modal-detail-row"><span class="mdr-label">Your Est. Out-of-Pocket</span><span class="mdr-value green" id="modal-oop">—</span></div>
+      <div class="modal-detail-row"><span class="mdr-label">Quality Rating</span><span class="mdr-value" id="modal-rating">—</span></div>
+      <div class="modal-detail-row"><span class="mdr-label">Insurance</span><span class="mdr-value">UCHP by Aetna · In-Network ✓</span></div>
+    </div>
+    <button class="modal-close" onclick="closeModal()">Close &amp; Return to Marketplace</button>
+    <div class="modal-note">The hospital will contact you within 1–2 business days to confirm. This is a demo prototype — no actual appointment has been made.</div>
+  </div>
+</div>
+
+<footer>
+  <strong>+</strong> — Prototype marketplace for shoppable healthcare procedures ·
+  University of Chicago · Platforms &amp; Market Design ·
+  All cost figures are illustrative and for demonstration purposes only.
+</footer>
+
+<script>
+  function openModal(name, oop, date, total, rating) {
+    document.getElementById('modal-hospital').textContent = name;
+    document.getElementById('modal-provider').textContent = name;
+    document.getElementById('modal-date').textContent = date;
+    document.getElementById('modal-total').textContent = total;
+    document.getElementById('modal-oop').textContent = oop;
+    document.getElementById('modal-rating').textContent = rating;
+    document.getElementById('modal').classList.add('open');
+  }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+  }
+  document.getElementById('modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+</script>
+</body>
+</html>
